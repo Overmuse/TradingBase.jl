@@ -9,7 +9,10 @@ end
 struct StopLimitOrder <: AbstractOrderType
     limit_price :: Float64
     stop_price :: Float64
+    has_triggered :: Ref{Bool}
 end
+
+StopLimitOrder(limit_price::Float64, stop_price::Float64) = StopLimitOrder(limit_price, stop_price, Ref{false})
 
 abstract type AbstractOrderDuration end
 struct DAY <: AbstractOrderDuration end
@@ -40,7 +43,9 @@ end
 
 limit_price(::AbstractOrderType) = nothing
 limit_price(x::Union{LimitOrder, StopLimitOrder}) = x.limit_price
-limit_price(o::OrderIntent) = limit_price(o.type)
+limit_price(o::AbstractOrder) = limit_price(o.type)
 stop_price(::AbstractOrderType) = nothing
 stop_price(x::Union{StopOrder, StopLimitOrder}) = x.stop_price
-stop_price(o::OrderIntent) = stop_price(o.type)
+stop_price(o::AbstractOrder) = stop_price(o.type)
+
+should_trade(::AbstractOrderType) = error("Unimplemented")
