@@ -24,6 +24,8 @@ export
     get_account,
     get_order,
     get_orders,
+    get_last,
+    get_historical,
     submit_order,
     cancel_order,
     cancel_orders,
