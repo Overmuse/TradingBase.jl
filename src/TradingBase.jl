@@ -26,6 +26,7 @@ export
     get_orders,
     get_last,
     get_historical,
+    get_equity,
     submit_order,
     cancel_order,
     cancel_orders,
