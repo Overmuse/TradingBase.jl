@@ -5,3 +5,4 @@ struct Account <: AbstractAccount
     id   :: UUID
     cash :: Float64
 end
+get_equity(a::AbstractAccount, args...; kwargs...) = error("Unimplemented")
