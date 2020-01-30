@@ -5,6 +5,7 @@ import UUIDs: UUID, uuid4
 export
     #types
     AbstractBrokerage,
+    AbstractMarketDataAggregate,
     AbstractOrder,
     OrderIntent,
     AbstractOrderType,
@@ -20,6 +21,9 @@ export
     FOK,
     AbstractPosition,
     Position,
+    Close,
+    OHLC,
+    OHLCV,
 
     get_account,
     get_order,
@@ -40,6 +44,7 @@ export
     cost_basis,
     cash
 
+include("aggregates.jl")
 include("order.jl")
 include("position.jl")
 include("account.jl")
