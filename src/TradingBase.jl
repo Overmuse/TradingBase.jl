@@ -26,6 +26,7 @@ export
     OHLCV,
 
     get_account,
+    get_close,
     get_order,
     get_orders,
     get_last,

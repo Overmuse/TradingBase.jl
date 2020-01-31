@@ -29,3 +29,5 @@ struct OHLCV{T <: Real} <: AbstractMarketDataAggregate
         new{eltype(promoted)}(promoted...)
     end
 end
+
+get_close(m::AbstractMarketDataAggregate) = m.close
