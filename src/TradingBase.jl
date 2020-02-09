@@ -6,6 +6,9 @@ export
     #types
     AbstractBrokerage,
     AbstractMarketDataAggregate,
+    AbstractMarketDataProvider,
+    SimulatedMarketDataProvider,
+    LiveMarketDataProvider,
     AbstractOrder,
     OrderIntent,
     AbstractOrderType,
@@ -51,6 +54,7 @@ export
     cash
 
 include("aggregates.jl")
+include("market_data.jl")
 include("order.jl")
 include("position.jl")
 include("account.jl")
