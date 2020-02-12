@@ -1,5 +1,7 @@
 module TradingBase
 
+using BusinessDays: USNYSE, isbday
+using Dates: Hour, Minute, Time, now, today
 import UUIDs: UUID, uuid4
 
 export
@@ -32,6 +34,7 @@ export
     close_position,
     close_positions,
     get_account,
+    get_clock,
     get_close,
     get_order,
     get_orders,
@@ -43,6 +46,11 @@ export
     submit_order,
     cancel_order,
     cancel_orders,
+    is_preopen,
+    is_opening,
+    is_open,
+    is_closing,
+    is_closed,
     quantity,
     limit_price,
     stop_price,
