@@ -31,7 +31,7 @@ struct OHLCV{T <: Real} <: AbstractMarketDataAggregate
     high::T
     low::T
     close::T
-    volume::T
+    volume::Int
 
     function OHLCV(open, high, low, close, volume)
         if any(high .< [open, low, close])
@@ -43,8 +43,8 @@ struct OHLCV{T <: Real} <: AbstractMarketDataAggregate
                 "Low is not the min in candle."
             ))
         end
-        promoted = promote(open, high, low, close, volume)
-        new{eltype(promoted)}(promoted...)
+        promoted = promote(open, high, low, close)
+        new{eltype(promoted)}(promoted..., volume)
     end
 end
 
