@@ -30,6 +30,7 @@ export
     Close,
     OHLC,
     OHLCV,
+    InconsistentPriceException,
 
     close_position,
     close_positions,
