@@ -1,7 +1,7 @@
 name = "TradingBase"
 uuid = "1e56c13b-5444-4379-9737-7aa7ad39eab5"
 authors = ["Sebastian Rollen <sebastian.rollen@betterment.com>"]
-version = "0.3.0"
+version = "0.3.1"
 
 [deps]
 BusinessDays = "4f18b42c-503e-5345-9536-bb0f25fc7038"
