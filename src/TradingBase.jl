@@ -1,7 +1,7 @@
 module TradingBase
 
 using BusinessDays: USNYSE, isbday
-using Dates: Hour, Minute, Time, now, today
+using Dates: DateTime, Hour, Minute, Time, now, today
 import UUIDs: UUID, uuid4
 
 export
