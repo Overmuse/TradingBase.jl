@@ -2,6 +2,7 @@ module TradingBase
 
 using BusinessDays: USNYSE, isbday
 using Dates: DateTime, Hour, Minute, Time, now, today
+using OrderedCollections: OrderedDict
 import UUIDs: UUID, uuid4
 
 export
@@ -32,7 +33,9 @@ export
     OHLC,
     OHLCV,
     InconsistentPriceException,
+    Trade,
 
+    aggregate,
     close_position,
     close_positions,
     get_account,
