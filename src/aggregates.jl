@@ -49,3 +49,82 @@ struct OHLCV{T <: Real} <: AbstractMarketDataAggregate
 end
 
 get_close(m::AbstractMarketDataAggregate) = m.close
+
+struct Trade
+    ticker
+    time
+    price
+    quantity
+end
+
+function aggregate(::Type{OHLCV}, t, trades::Vector{Trade})
+    min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
+    bins = min_t:t:max_t
+    statistics = OrderedDict{DateTime, OHLCV}()
+    bin_count = 1
+    trade_count = 1
+    while bin_count < length(bins)
+        open = trades[max(1, trade_count-1)].price
+        high = open
+        low = open
+        volume = 0
+        while trade_count <= length(trades) && trades[trade_count].time < bins[bin_count+1]
+            price = trades[trade_count].price
+            if price > high
+                high = price
+            elseif price < low
+                low = price
+            end
+            volume += trades[trade_count].quantity
+            trade_count += 1
+        end
+        close = trades[trade_count-1].price
+        statistics[bins[bin_count]] = OHLCV(open, high, low, close, volume)
+        bin_count += 1
+    end
+    return statistics
+end
+
+function aggregate(::Type{OHLC}, t, trades::Vector{Trade})
+    min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
+    bins = min_t:t:max_t
+    statistics = OrderedDict{DateTime, OHLC}()
+    bin_count = 1
+    trade_count = 1
+    while bin_count < length(bins)
+        open = trades[max(1, trade_count-1)].price
+        high = open
+        low = open
+        while trade_count <= length(trades) && trades[trade_count].time < bins[bin_count+1]
+            price = trades[trade_count].price
+            if price > high
+                high = price
+            elseif price < low
+                low = price
+            end
+            trade_count += 1
+        end
+        close = trades[trade_count-1].price
+        statistics[bins[bin_count]] = OHLC(open, high, low, close)
+        bin_count += 1
+    end
+    return statistics
+end
+
+function aggregate(::Type{Close}, t, trades::Vector{Trade})
+    min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
+    bins = min_t:t:max_t
+    statistics = OrderedDict{DateTime, Close}()
+    bin_count = 1
+    trade_count = 1
+    while bin_count < length(bins)
+        while trade_count <= length(trades) && trades[trade_count].time < bins[bin_count+1]
+            price = trades[trade_count].price
+            trade_count += 1
+        end
+        close = trades[trade_count-1].price
+        statistics[bins[bin_count]] = Close(close)
+        bin_count += 1
+    end
+    return statistics
+end
