@@ -55,9 +55,15 @@ struct Trade
     time
     price
     quantity
+    conditions
 end
 
-function aggregate(::Type{OHLCV}, t, trades::Vector{Trade})
+const DEFAULT_MAPPING = Dict{String, Vector{Int}}(
+    "HL" => [2, 7, 13, 15, 16, 20, 21, 37, 52, 53],
+    "V"  => [15, 16, 38]
+)
+
+function aggregate(::Type{OHLCV}, t, trades::Vector{Trade}; trade_mapping = DEFAULT_MAPPING)
     min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
     bins = min_t:t:max_t
     statistics = OrderedDict{DateTime, OHLCV}()
@@ -70,12 +76,15 @@ function aggregate(::Type{OHLCV}, t, trades::Vector{Trade})
         volume = 0
         while trade_count <= length(trades) && trades[trade_count].time < bins[bin_count+1]
             price = trades[trade_count].price
+            conditions = trades[trade_count].conditions
             if price > high
                 high = price
             elseif price < low
                 low = price
             end
-            volume += trades[trade_count].quantity
+            if !any(x -> x ∈ trade_mapping["V"], conditions)
+                volume += trades[trade_count].quantity
+            end
             trade_count += 1
         end
         close = trades[trade_count-1].price
