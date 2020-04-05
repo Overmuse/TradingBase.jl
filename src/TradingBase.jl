@@ -32,7 +32,6 @@ export
     Close,
     OHLC,
     OHLCV,
-    InconsistentPriceException,
     Trade,
 
     aggregate,
