@@ -13,4 +13,5 @@ using
     include("test-aggregates.jl")
     include("test-market_data.jl")
     include("test-order.jl")
+    include("test-position.jl")
 end
