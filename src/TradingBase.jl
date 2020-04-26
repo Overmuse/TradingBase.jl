@@ -1,12 +1,15 @@
 module TradingBase
 
 using BusinessDays: USNYSE, isbday
-using Dates: DateTime, Hour, Minute, Time, now, today
+using Dates: DateTime, Date, Hour, Minute, Time, now, today
 using OrderedCollections: OrderedDict
 import UUIDs: UUID, uuid4
+using Mocking
 
 export
     #types
+    AbstractAccount,
+    Account,
     AbstractBrokerage,
     AbstractMarketDataAggregate,
     AbstractMarketDataProvider,

@@ -30,11 +30,11 @@ end
 get_close(m::AbstractMarketDataAggregate) = m.close
 
 struct Trade
-    ticker
-    time
-    price
-    quantity
-    conditions
+    ticker     :: String
+    time       :: DateTime
+    price      :: Float64
+    quantity   :: Int
+    conditions :: Vector{Int}
 end
 
 const DEFAULT_MAPPING = Dict{String, Vector{Int}}(
@@ -44,7 +44,11 @@ const DEFAULT_MAPPING = Dict{String, Vector{Int}}(
 
 function aggregate(::Type{OHLCV}, t, trades::Vector{Trade}; trade_mapping = DEFAULT_MAPPING)
     min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
-    bins = min_t:t:max_t
+    if max_t == trades[end].time
+        bins = min_t:t:(max_t+t)
+    else
+        bins = min_t:t:max_t
+    end
     statistics = OrderedDict{DateTime, OHLCV}()
     bin_count = 1
     trade_count = 1
@@ -75,7 +79,11 @@ end
 
 function aggregate(::Type{OHLC}, t, trades::Vector{Trade})
     min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
-    bins = min_t:t:max_t
+    if max_t == trades[end].time
+        bins = min_t:t:(max_t+t)
+    else
+        bins = min_t:t:max_t
+    end
     statistics = OrderedDict{DateTime, OHLC}()
     bin_count = 1
     trade_count = 1
@@ -101,7 +109,11 @@ end
 
 function aggregate(::Type{Close}, t, trades::Vector{Trade})
     min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
-    bins = min_t:t:max_t
+    if max_t == trades[end].time
+        bins = min_t:t:(max_t+t)
+    else
+        bins = min_t:t:max_t
+    end
     statistics = OrderedDict{DateTime, Close}()
     bin_count = 1
     trade_count = 1

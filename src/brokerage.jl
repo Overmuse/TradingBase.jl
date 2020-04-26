@@ -1,11 +1,11 @@
 abstract type AbstractBrokerage end
-get_account(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-get_order(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-get_orders(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-get_position(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-get_positions(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-submit_order(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-cancel_order(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-cancel_orders(a::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-close_position(b::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
-close_positions(b::AbstractBrokerage, args...; kwargs...) = error("Unimplemented")
+function get_account end
+function get_order end
+function get_orders end
+function get_position end
+function get_positions end
+function submit_order end
+function cancel_order end
+function cancel_orders end
+function close_position end
+function close_positions end
