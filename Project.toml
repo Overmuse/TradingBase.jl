@@ -1,7 +1,7 @@
 name = "TradingBase"
 uuid = "1e56c13b-5444-4379-9737-7aa7ad39eab5"
 authors = ["Sebastian Rollen <sebastian.rollen@betterment.com>"]
-version = "0.4.0"
+version = "1.0.0"
 
 [deps]
 BusinessDays = "4f18b42c-503e-5345-9536-bb0f25fc7038"
@@ -12,4 +12,5 @@ UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [compat]
 BusinessDays = "0.9"
+Mocking = "0.7"
 OrderedCollections = "1.1"
