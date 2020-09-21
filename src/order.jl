@@ -10,6 +10,12 @@ struct StopLimitOrder <: AbstractOrderType
     limit_price :: Float64
     stop_price :: Float64
 end
+struct TrailingStopPriceOrder <: AbstractOrderType
+    trail_price :: Float64
+end
+struct TrailingStopPercentOrder <: AbstractOrderType
+    trail_percent :: Float64
+end
 
 abstract type AbstractOrderDuration end
 struct DAY <: AbstractOrderDuration end
@@ -44,6 +50,12 @@ limit_price(o::AbstractOrder) = limit_price(o.type)
 stop_price(::AbstractOrderType) = nothing
 stop_price(x::Union{StopOrder, StopLimitOrder}) = x.stop_price
 stop_price(o::AbstractOrder) = stop_price(o.type)
+trail_price(::AbstractOrderType) = nothing
+trail_price(x::TrailingStopPriceOrder) = x.trail_price
+trail_price(o::AbstractOrder) = trail_price(o.type)
+trail_percent(::AbstractOrderType) = nothing
+trail_percent(x::TrailingStopPercentOrder) = x.trail_percent
+trail_percent(o::AbstractOrder) = trail_percent(o.type)
 
 function should_trade end
 
