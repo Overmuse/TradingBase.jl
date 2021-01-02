@@ -10,6 +10,7 @@ struct StopLimitOrder <: AbstractOrderType
     limit_price :: Float64
     stop_price :: Float64
 end
+JSON3.StructType(::Type{<:AbstractOrderType}) = JSON3.StringType()
 
 abstract type AbstractOrderDuration end
 struct DAY <: AbstractOrderDuration end
@@ -18,6 +19,25 @@ struct OPG <: AbstractOrderDuration end
 struct CLS <: AbstractOrderDuration end
 struct IOC <: AbstractOrderDuration end
 struct FOK <: AbstractOrderDuration end
+
+Base.string(::DAY) = "DAY"
+Base.string(::GTC) = "GTC"
+Base.string(::OPG) = "OPG"
+Base.string(::CLS) = "CLS"
+Base.string(::IOC) = "IOC"
+Base.string(::FOK) = "FOK"
+
+JSON3.StructType(::Type{<:AbstractOrderDuration}) = JSON3.StringType()
+function AbstractOrderDuration(s::String)
+    Dict(
+        "DAY" => DAY(),
+        "GTC" => GTC(),
+        "OPG" => OPG(),
+        "CLS" => CLS(),
+        "IOC" => IOC(),
+        "FOK" => FOK(),
+    )[s]
+end
 
 abstract type AbstractOrder end
 id(o::AbstractOrder) = o.id
@@ -64,6 +84,7 @@ mutable struct Order{O <: AbstractOrderType, D <: AbstractOrderDuration} <: Abst
     commission::Union{Float64, Nothing}
     status::String
 end
+JSON3.StructType(::Type{<:AbstractOrder}) = JSON3.Struct()
 
 is_filled(o::Order) = o.filled_quantity == o.quantity
 status(o::AbstractOrder) = o.status

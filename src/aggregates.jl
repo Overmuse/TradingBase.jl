@@ -1,31 +1,22 @@
 abstract type AbstractMarketDataAggregate end
 
-struct Close{T <: Real} <: AbstractMarketDataAggregate
-    close::T
+struct Close <: AbstractMarketDataAggregate
+    close::Float64
 end
-struct OHLC{T <: Real} <: AbstractMarketDataAggregate
-    open::T
-    high::T
-    low::T
-    close::T
-
-    function OHLC(open, high, low, close)
-        promoted = promote(open, high, low, close)
-        new{eltype(promoted)}(promoted...)
-    end
+struct OHLC <: AbstractMarketDataAggregate
+    open::Float64
+    high::Float64
+    low::Float64
+    close::Float64
 end
-struct OHLCV{T <: Real} <: AbstractMarketDataAggregate
-    open::T
-    high::T
-    low::T
-    close::T
+struct OHLCV <: AbstractMarketDataAggregate
+    open::Float64
+    high::Float64
+    low::Float64
+    close::Float64
     volume::Int
-
-    function OHLCV(open, high, low, close, volume)
-        promoted = promote(open, high, low, close)
-        new{eltype(promoted)}(promoted..., volume)
-    end
 end
+JSON3.StructType(::Type{<:AbstractMarketDataAggregate}) = JSON3.Struct()
 
 get_close(m::AbstractMarketDataAggregate) = m.close
 
@@ -37,12 +28,12 @@ struct Trade
     conditions :: Vector{Int}
 end
 
-const DEFAULT_MAPPING = Dict{String, Vector{Int}}(
+const DEFAULT_MAPPING2 = Dict{String, Vector{Int}}(
     "HL" => [2, 7, 13, 15, 16, 20, 21, 37, 52, 53],
     "V"  => [15, 16, 38]
 )
 
-function aggregate(::Type{OHLCV}, t, trades::Vector{Trade}; trade_mapping = DEFAULT_MAPPING)
+function aggregate(::Type{OHLCV}, t, trades::Vector{Trade}; trade_mapping = DEFAULT_MAPPING2)
     min_t, max_t = round(trades[1].time, t, RoundDown), round(trades[end].time, t, RoundUp)
     if max_t == trades[end].time
         bins = min_t:t:(max_t+t)
@@ -60,10 +51,12 @@ function aggregate(::Type{OHLCV}, t, trades::Vector{Trade}; trade_mapping = DEFA
         while trade_count <= length(trades) && trades[trade_count].time < bins[bin_count+1]
             price = trades[trade_count].price
             conditions = trades[trade_count].conditions
-            if price > high
-                high = price
-            elseif price < low
-                low = price
+            if !any(x -> x ∈ trade_mapping["HL"], conditions)
+                if price > high
+                    high = price
+                elseif price < low
+                    low = price
+                end
             end
             if !any(x -> x ∈ trade_mapping["V"], conditions)
                 volume += trades[trade_count].quantity

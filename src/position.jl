@@ -10,6 +10,7 @@ struct Position <: AbstractPosition
     quantity :: Int
     cost_basis :: Float64
 end
+JSON3.StructType(::Type{<:AbstractPosition}) = JSON3.Struct()
 
 function Position(symbol, quantity, cost_basis)
     Position(uuid4(), symbol, quantity, cost_basis)

@@ -3,6 +3,7 @@ module TradingBase
 using BusinessDays: USNYSE, isbday
 using Dates: DateTime, Date, Hour, Minute, Time, now, today
 using OrderedCollections: OrderedDict
+using JSON3
 import UUIDs: UUID, uuid4
 using Mocking
 

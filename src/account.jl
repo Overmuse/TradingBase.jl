@@ -7,3 +7,4 @@ struct Account <: AbstractAccount
 end
 Account(cash) = Account(uuid4(), cash)
 get_equity(a::Account) = a.cash
+JSON3.StructType(::Type{Account}) = JSON3.Struct()
